@@ -52,7 +52,7 @@ def addtoy(request):
         'categories':category,
         'subcategories':subcategory,
         'stores' :store,
-        'manufacturer' : manufacturer
+        'manufacturers' : manufacturer
     }
     return render(request,'admin/addtoy.html',context)
 
@@ -73,18 +73,108 @@ def storetoy(request):
     manufacturer  = request.POST.get('manufacturer')
     if 'toyimage' in request.FILES:
         image = request.FILES['toyimage']
-        location= os.path.join(settings.MEDIA_ROOT,'toys')
-        obj = FileSystemStorage(location=location)
-        obj.save(image.name,image)
-        imgUrl = f'../../media/toys/{image.name}'
-        if afp=='True' and afr == 'True':
-            Toy.objects.create(name = toyname,description = toydescription,purchasePrice= purchaseprice,rentPrice=rentprice,storeId_id=store,categoryId_id=category,subcategoryId_id=subcategory,stockQuantity=quantity,manufacturerId_id=manufacturer,img_url=imgUrl,isPurchasable=afp,isRentable = afr)
-        elif afp == 'True':
-            Toy.objects.create(name = toyname,description = toydescription,purchasePrice= purchaseprice,rentPrice=0.00,storeId_id=store,categoryId_id=category,subcategoryId_id=subcategory,stockQuantity=quantity,manufacturerId_id=manufacturer,img_url=imgUrl,isPurchasable=afp,isRentable = afr)
+        ext = ['png','jpg','jpeg']
+        imgext = image.name.split('.')
+        imgext = imgext[-1]
+        if imgext in ext:
+            location= os.path.join(settings.MEDIA_ROOT,'toys')
+            obj = FileSystemStorage(location=location)
+            obj.save(image.name,image)
+            imgUrl = f'../../media/toys/{image.name}'
+            if afp=='True' and afr == 'True':
+                if (not purchaseprice or purchaseprice==''):
+                    purchaseprice =0
+                if (not rentprice or rentprice==''):
+                    rentprice =0
+                Toy.objects.create(name = toyname,description = toydescription,purchasePrice= purchaseprice,rentPrice=rentprice,storeId_id=store,categoryId_id=category,subcategoryId_id=subcategory,stockQuantity=quantity,manufacturerId_id=manufacturer,img_url=imgUrl,isPurchasable=afp,isRentable = afr)
+            elif afp == 'True':
+                if (not purchaseprice or purchaseprice==''):
+                    purchaseprice =0
+                Toy.objects.create(name = toyname,description = toydescription,purchasePrice= purchaseprice,rentPrice=0.00,storeId_id=store,categoryId_id=category,subcategoryId_id=subcategory,stockQuantity=quantity,manufacturerId_id=manufacturer,img_url=imgUrl,isPurchasable=afp,isRentable = afr)
+            else:
+                if (not rentprice or rentprice==''):
+                    rentprice =0
+                Toy.objects.create(name = toyname,description = toydescription,purchasePrice= 0.00,rentPrice=rentprice,storeId_id=store,categoryId_id=category,subcategoryId_id=subcategory,stockQuantity=quantity,manufacturerId_id=manufacturer,img_url=imgUrl,isPurchasable=afp,isRentable = afr)
+            messages.success(request,'Toy added Successfully')
+            return redirect('addtoy')
         else:
-            Toy.objects.create(name = toyname,description = toydescription,purchasePrice= 0.00,rentPrice=rentprice,storeId_id=store,categoryId_id=category,subcategoryId_id=subcategory,stockQuantity=quantity,manufacturerId_id=manufacturer,img_url=imgUrl,isPurchasable=afp,isRentable = afr)
-        messages.success(request,'Toy added Successfully')
-        return redirect('addtoy')
+            toyname  = request.POST.get('toyname')
+            toydescription  = request.POST.get('toydiscription')
+            afp  = request.POST.get('availableforpurchase')
+            purchaseprice  = request.POST.get('purchaseprice')
+            afr  = request.POST.get('availableforrent')
+            rentprice  = request.POST.get('rentprice')
+            quantity  = request.POST.get('quantity')
+            category  = request.POST.get('category')
+            subcategory  = request.POST.get('subcategory')
+            store  = request.POST.get('store')
+            manufacturer  = request.POST.get('manufacturer')
+            categories = Category.objects.all()
+            subcategories = Subcategory.objects.all()
+            stores = Store.objects.all()
+            manufacturers =  Manufacturer.objects.all()
+            print(afr,afp)
+            if afp and afr:
+                context = {
+                    'toyname':toyname,
+                    'toydescription':toydescription,
+                    'afp':afp,
+                    'pprice':purchaseprice,
+                    'afr':afr,
+                    'rprice':rentprice,
+                    'quantity':quantity,
+                    'category':category,
+                    'subcategory':subcategory,
+                    'store':store,
+                    'manufacturer':manufacturer,
+                    'categories':categories,
+                    'subcategories':subcategories,
+                    'stores':stores,
+                    'manufacturers':manufacturers
+                }
+                messages.error(request,f'image extension should be {ext}')
+                return render(request,'admin/addtoy.html',context)
+            elif afr:
+                context = {
+                    'toyname':toyname,
+                    'toydescription':toydescription,
+                    'notafp':True,
+                    'pprice':purchaseprice,
+                    'afr':afr,
+                    'rprice':rentprice,
+                    'quantity':quantity,
+                    'category':category,
+                    'subcategory':subcategory,
+                    'store':store,
+                    'manufacturer':manufacturer,
+                    'categories':categories,
+                    'subcategories':subcategories,
+                    'stores':stores,
+                    'manufacturers':manufacturers
+                }
+                
+                messages.error(request,f'image extension should be {ext}')
+                return render(request,'admin/addtoy.html',context)
+            elif afp:
+                context = {
+                    'toyname':toyname,
+                    'toydescription':toydescription,
+                    'afp':afp,
+                    'pprice':purchaseprice,
+                    'notafr':True,
+                    'rprice':rentprice,
+                    'quantity':quantity,
+                    'category':category,
+                    'subcategory':subcategory,
+                    'store':store,
+                    'manufacturer':manufacturer,
+                    'categories':categories,
+                    'subcategories':subcategories,
+                    'stores':stores,
+                    'manufacturers':manufacturers
+                }
+                messages.error(request,f'image extension should be {ext}')
+                return render(request,'admin/addtoy.html',context)
     else:
         toyname  = request.POST.get('toyname')
         toydescription  = request.POST.get('toydiscription')
@@ -109,7 +199,11 @@ def storetoy(request):
                 'category':category,
                 'subcategory':subcategory,
                 'store':store,
-                'manufacturer':manufacturer
+                'manufacturer':manufacturer,
+                'categories':categories,
+                'subcategories':subcategories,
+                'stores':stores,
+                'manufacturers':manufacturers
             }
             return render(request,'admin/addtoy.html',context)
         elif afr:
@@ -124,7 +218,11 @@ def storetoy(request):
                 'category':category,
                 'subcategory':subcategory,
                 'store':store,
-                'manufacturer':manufacturer
+                'manufacturer':manufacturer,
+                'categories':categories,
+                'subcategories':subcategories,
+                'stores':stores,
+                'manufacturers':manufacturers
             }
             return render(request,'admin/addtoy.html',context)
         else:
@@ -139,7 +237,11 @@ def storetoy(request):
                 'category':category,
                 'subcategory':subcategory,
                 'store':store,
-                'manufacturer':manufacturer
+                'manufacturer':manufacturer,
+                'categories':categories,
+                'subcategories':subcategories,
+                'stores':stores,
+                'manufacturers':manufacturers
             }
             return render(request,'admin/addtoy.html',context)
 

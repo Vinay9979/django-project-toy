@@ -15,9 +15,15 @@
                                 {% csrf_token %}
                                 {%if messages%}
                                    {% for message in messages%}
+                                    {% if 'success' in message.tags %}
                                    <div class="alert alert-success" role="alert">
                                     {{message}}
                                 </div>
+                                {% elif 'error'  in message.tags%}
+                                <div class="alert alert-danger" role="alert">
+                                    {{message}}
+                                </div>
+                                {% endif %}
                                     {% endfor %}
                                 {% endif %}
                                 <div class="row justify-content-md-center">
@@ -122,7 +128,7 @@
                                     </div>
                                         <div class="col-sm-8">
                                             <div class="form-group">
-                                                <input type="number" name = "quantity" value = "quantity" class="form-control" placeholder="99" required>
+                                                <input type="number" name = "quantity" value = "{{quantity}}" class="form-control" placeholder="99" required>
                                             </div>
                                         </div>
                                     </div>
@@ -187,7 +193,7 @@
                                     <div class="col-sm-8">
                                         <div class="form-group">
                                             <select id="inputState" name = "manufacturer" class="form-control">
-                                                {% for manufacturer in manufacturer  %}
+                                                {% for manufacturer in manufacturers  %}
                                                 <option value="{{manufacturer.id}}" {% if manufacturer.id == manufacturer %}{% endif %} >{{manufacturer.manufacturerName}}</option>
                                                 {% endfor %}
                                             </select>
@@ -215,8 +221,7 @@
                                         </div>
                                     </div>
                                 <div>
-                                <button type="submit" class="btn-lg  btn-outline-primary">Add Toy</button>
-                                
+                                <button type="submit" class="btn-lg  btn-outline-primary">Add Toy</button>                               
                             </form>
                         </div>
                     </div>
