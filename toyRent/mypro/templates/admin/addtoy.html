@@ -28,7 +28,7 @@
                                     </div>
                                         <div class="col-sm-8">
                                             <div class="form-group">
-                                                <input type="text" name = "toyname" class="form-control" placeholder="Text" required>
+                                                <input type="text" name = "toyname" value = "{{toyname}}" class="form-control" placeholder="Text" required>
                                             </div>
                                         </div>
                                     </div>
@@ -41,7 +41,7 @@
                                     </div>
                                         <div class="col-sm-8">
                                             <div class="form-group">
-                                                <textarea class="form-control" name = "toydiscription" id="exampleFormControlTextarea1" rows="3" required></textarea>
+                                                <textarea class="form-control" name = "toydiscription"  id="exampleFormControlTextarea1" rows="3" required>{{toydescription}}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -55,8 +55,8 @@
                                             <div class="col-sm-8">
                                                 <div class="form-group">
                                                     <select id="purchaseinput" name = "availableforpurchase" class="form-control">
-                                                        <option value="True">Yes</option>
-                                                        <option value="False">No</option>
+                                                        <option {% if afp %}selected{% endif %} value="True">Yes</option>
+                                                        <option {% if notafp %}selected{% endif %} value="False">No</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -74,7 +74,7 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">&#x20b9;</span>
                                                     </div>
-                                                    <input type="number" class="form-control" name = "purchaseprice"aria-label="Amount (to the nearest dollar)">
+                                                    <input type="number" class="form-control" value ="{{pprice}}" name = "purchaseprice"aria-label="Amount (to the nearest dollar)">
                                                 </div>
                                             </div>
                                         </div>
@@ -89,8 +89,8 @@
                                     <div class="col-sm-8">
                                         <div class="form-group">
                                             <select id="rentinput" name = "availableforrent"class="form-control">
-                                                <option value="True">Yes</option>
-                                                <option value="False">No</option>
+                                                <option {% if afr %}selected{% endif %} value="True">Yes</option>
+                                                <option {% if notafr %}selected{% endif %} value="False">No</option>
                                             </select>
                                         </div>
                                     </div>
@@ -108,7 +108,7 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">&#x20b9;</span>
                                                     </div>
-                                                    <input type="number" class="form-control"name = "rentprice" aria-label="Amount (to the nearest dollar)">
+                                                    <input type="number" class="form-control" value="rprice" name = "rentprice" aria-label="Amount (to the nearest dollar)">
                                                 </div>
                                             </div>
                                         </div>
@@ -122,7 +122,7 @@
                                     </div>
                                         <div class="col-sm-8">
                                             <div class="form-group">
-                                                <input type="number" name = "quantity" class="form-control" placeholder="99" required>
+                                                <input type="number" name = "quantity" value = "quantity" class="form-control" placeholder="99" required>
                                             </div>
                                         </div>
                                     </div>
@@ -137,7 +137,7 @@
                                         <div class="form-group">
                                             <select id="inputState" name = "category" class="form-control">
                                                 {% for category in categories  %}
-                                                <option value="{{category.id}}" >{{category.categoryName}}</option>
+                                                <option value="{{category.id}}" {% if category.id == category %}selected{% endif %} >{{category.categoryName}}</option>
                                                 {% endfor %}
                                         
                                             </select>
@@ -154,7 +154,7 @@
                                         <div class="form-group">
                                             <select id="inputState" name = "subcategory" class="form-control">
                                                 {% for subcategory in subcategories  %}
-                                                <option value="{{subcategory.id}}" >{{subcategory.subcategoryName}}</option>
+                                                <option value="{{subcategory.id}}" {% if subcategory.id == subcategory %}selected{% endif %} >{{subcategory.subcategoryName}}</option>
                                                 {% endfor %}
                                         
                                             </select>
@@ -171,7 +171,7 @@
                                         <div class="form-group">
                                             <select id="inputState" name = "store" class="form-control">
                                                 {% for store in stores  %}
-                                                <option value="{{store.id}}" >{{store.storeName}}</option>
+                                                <option value="{{store.id}}" {% if store.id == store %}{% endif %}>{{store.storeName}}</option>
                                                 {% endfor %}
                                                 
                                             </select>
@@ -188,7 +188,7 @@
                                         <div class="form-group">
                                             <select id="inputState" name = "manufacturer" class="form-control">
                                                 {% for manufacturer in manufacturer  %}
-                                                <option value="{{manufacturer.id}}" >{{manufacturer.manufacturerName}}</option>
+                                                <option value="{{manufacturer.id}}" {% if manufacturer.id == manufacturer %}{% endif %} >{{manufacturer.manufacturerName}}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>

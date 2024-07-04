@@ -71,19 +71,33 @@ def storetoy(request):
     subcategory  = request.POST.get('subcategory')
     store  = request.POST.get('store')
     manufacturer  = request.POST.get('manufacturer')
-    image = request.FILES['toyimage']
-    location= os.path.join(settings.MEDIA_ROOT,'toys')
-    obj = FileSystemStorage(location=location)
-    obj.save(image.name,image)
-    imgUrl = f'../../media/toys/{image.name}'
-    if afp=='True' and afr == 'True':
-        Toy.objects.create(name = toyname,description = toydescription,purchasePrice= purchaseprice,rentPrice=rentprice,storeId_id=store,categoryId_id=category,subcategoryId_id=subcategory,stockQuantity=quantity,manufacturerId_id=manufacturer,img_url=imgUrl,isPurchasable=afp,isRentable = afr)
-    elif afp == 'True':
-        Toy.objects.create(name = toyname,description = toydescription,purchasePrice= purchaseprice,rentPrice=0.00,storeId_id=store,categoryId_id=category,subcategoryId_id=subcategory,stockQuantity=quantity,manufacturerId_id=manufacturer,img_url=imgUrl,isPurchasable=afp,isRentable = afr)
+    if 'toyimage' in request.FILES:
+        image = request.FILES['toyimage']
+        location= os.path.join(settings.MEDIA_ROOT,'toys')
+        obj = FileSystemStorage(location=location)
+        obj.save(image.name,image)
+        imgUrl = f'../../media/toys/{image.name}'
+        if afp=='True' and afr == 'True':
+            Toy.objects.create(name = toyname,description = toydescription,purchasePrice= purchaseprice,rentPrice=rentprice,storeId_id=store,categoryId_id=category,subcategoryId_id=subcategory,stockQuantity=quantity,manufacturerId_id=manufacturer,img_url=imgUrl,isPurchasable=afp,isRentable = afr)
+        elif afp == 'True':
+            Toy.objects.create(name = toyname,description = toydescription,purchasePrice= purchaseprice,rentPrice=0.00,storeId_id=store,categoryId_id=category,subcategoryId_id=subcategory,stockQuantity=quantity,manufacturerId_id=manufacturer,img_url=imgUrl,isPurchasable=afp,isRentable = afr)
+        else:
+            Toy.objects.create(name = toyname,description = toydescription,purchasePrice= 0.00,rentPrice=rentprice,storeId_id=store,categoryId_id=category,subcategoryId_id=subcategory,stockQuantity=quantity,manufacturerId_id=manufacturer,img_url=imgUrl,isPurchasable=afp,isRentable = afr)
+        messages.success(request,'Toy added Successfully')
+        return redirect('addtoy')
     else:
-        Toy.objects.create(name = toyname,description = toydescription,purchasePrice= 0.00,rentPrice=rentprice,storeId_id=store,categoryId_id=category,subcategoryId_id=subcategory,stockQuantity=quantity,manufacturerId_id=manufacturer,img_url=imgUrl,isPurchasable=afp,isRentable = afr)
-    messages.success(request,'Toy added Successfully')
-    return redirect('addtoy')
+        toyname  = request.POST.get('toyname')
+        toydescription  = request.POST.get('toydiscription')
+        afp  = request.POST.get('availableforpurchase')
+        purchaseprice  = request.POST.get('purchaseprice')
+        afr  = request.POST.get('availableforrent')
+        rentprice  = request.POST.get('rentprice')
+        quantity  = request.POST.get('quantity')
+        category  = request.POST.get('category')
+        subcategory  = request.POST.get('subcategory')
+        store  = request.POST.get('store')
+        manufacturer  = request.POST.get('manufacturer')
+        
 
 @login_required(login_url='/admin/login/')
 def showtoys(request):
