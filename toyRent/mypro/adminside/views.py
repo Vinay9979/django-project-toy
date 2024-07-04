@@ -97,7 +97,52 @@ def storetoy(request):
         subcategory  = request.POST.get('subcategory')
         store  = request.POST.get('store')
         manufacturer  = request.POST.get('manufacturer')
-        
+        if afp and afr:
+            context = {
+                'toyname':toyname,
+                'toydescription':toydescription,
+                'afp':afp,
+                'pprice':purchaseprice,
+                'afr':afr,
+                'rprice':rentprice,
+                'quantity':quantity,
+                'category':category,
+                'subcategory':subcategory,
+                'store':store,
+                'manufacturer':manufacturer
+            }
+            return render(request,'admin/addtoy.html',context)
+        elif afr:
+            context = {
+                'toyname':toyname,
+                'toydescription':toydescription,
+                'notafp':True,
+                'pprice':purchaseprice,
+                'afr':afr,
+                'rprice':rentprice,
+                'quantity':quantity,
+                'category':category,
+                'subcategory':subcategory,
+                'store':store,
+                'manufacturer':manufacturer
+            }
+            return render(request,'admin/addtoy.html',context)
+        else:
+            context = {
+                'toyname':toyname,
+                'toydescription':toydescription,
+                'afp':afp,
+                'pprice':purchaseprice,
+                'notafr':True,
+                'rprice':rentprice,
+                'quantity':quantity,
+                'category':category,
+                'subcategory':subcategory,
+                'store':store,
+                'manufacturer':manufacturer
+            }
+            return render(request,'admin/addtoy.html',context)
+
 
 @login_required(login_url='/admin/login/')
 def showtoys(request):
