@@ -1,0 +1,96 @@
+{% extends "admin/common/layout.html" %}
+{% load static %}
+{% block content %}
+<div class="pcoded-main-container">
+    <div class="pcoded-content">
+        <div class="row">
+            <div class="col-sm-12">
+            <form  method="post" action="{% url 'storemanufacturer'%}">
+                {% csrf_token %}    
+                <div class="card text-center">
+                    <div class="card-header">
+                        <h5>Add Manufacturer Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label class="col-sm-16 col-form-label">Manufacturer Name</label>
+                                </div>
+                            </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Text" name="name" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-md-center">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label class="col-sm-12 col-form-label">Address</label>
+                                </div>
+                            </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <textarea class="form-control" placeholder="Address"name = "address" id="exampleFormControlTextarea1" required rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-md-center">
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label class="col-sm-12 col-form-label">Owner Name</label>
+                                    </div>
+                                </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="Text" name="oname" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label class="col-sm-12 col-form-label">Email</label>
+                                        </div>
+                                    </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="example@gmail.com" required name="email">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-md-center">
+                                        <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <label class="col-sm-12 col-form-label">Website</label>
+                                            </div>
+                                        </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" placeholder="storename.anything" required name="website">
+                                                    {% if messages %}
+                                                      {% for message in messages %}
+                                                        <div class="alert alert-success" role="alert">
+                                                            {{message}}
+                                                        </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                    <div>
+                </div>
+                <button type="submit" class="btn  btn-outline-success">Add Manufacturer</button>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+<!-- [ Pre-loader ] End -->
+<!-- [ navigation menu ] start -->
+<!-- [ navigation menu ] end -->
+<!-- [ Header ] start -->
+{% comment %} included in header.html {% endcomment %}
+<!-- [ Header ] end -->

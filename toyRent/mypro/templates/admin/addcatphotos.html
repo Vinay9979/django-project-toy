@@ -1,0 +1,100 @@
+{% extends "admin/common/layout.html" %}
+{% load static %}
+{% block content %}
+<div class="pcoded-main-container">
+    <div class="pcoded-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            <h5>Add Photo</h5>
+                        </div>
+                        <div class="card-body">
+                            <form action = "{% url 'storecatphoto' %}" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {%if messages%}
+                                   {% for message in messages %}
+                                   {% if 'error' in message.tags %}
+                                   <div class="alert alert-danger" role="alert">
+                                    {{message}}
+                                </div>
+                                   {% else %}
+                                   <div class="alert alert-success" role="alert">
+                                    {{message}}
+                                </div>
+                                {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                                <div class="row justify-content-md-center">
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label class="col-sm-20 col-form-label">Select Category</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <div class="form-group">
+                                            <select id="inputState" name = "category" class="form-control">
+                                                {% for category in categories  %}
+                                                <option value="{{category.id}}" >{{category.categoryName}}</option>
+                                                {% endfor %}
+                                        
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label class="col-sm-20 col-form-label">Upload Image</label>
+                                        </div>
+                                    </div>
+                                        <div class="col-sm-8">
+                                            <div class="form-group">
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Upload</span>
+                                                    </div>
+                                                    <div class="custom-file">
+                                                        <input type="file" name = "catimage" class="custom-file-input" id="inputGroupFile01" required>
+                                                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <div>
+                                <button type="submit" class="btn-lg  btn-outline-primary">Add photo</button>
+                                
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInput = document.getElementById('inputGroupFile01');
+        const fileLabel = document.querySelector('label[for="inputGroupFile01"]');
+    
+        fileInput.addEventListener('change', function (event) {
+            const fileName = event.target.files[0] ? event.target.files[0].name : 'Choose file';
+            fileLabel.textContent = fileName;
+        });
+    });
+    </script>
+<script>
+    $(document).ready(function() {
+        setTimeout(function() {
+            $('#alert-message').fadeOut('slow');
+        }, 2000); // 2000 milliseconds = 2 seconds
+    });
+</script>
+{% endblock content %}
+<!-- [ Pre-loader ] End -->
+<!-- [ navigation menu ] start -->
+
+<!-- [ navigation menu ] end -->
+<!-- [ Header ] start -->
+{% comment %} included in header.html {% endcomment %}
+<!-- [ Header ] end -->

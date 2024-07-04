@@ -1,0 +1,89 @@
+{% extends "admin/common/layout.html" %}
+{% load static %}
+{% block content %}
+<div class="pcoded-main-container">
+    <div class="pcoded-content">
+        <div class="row">
+            <div class="col-sm-12">
+            <form  method="post" action="{% url 'updatestore' store.id %}">
+                {% csrf_token %}    
+                <div class="card text-center">
+                    <div class="card-header">
+                        <h5>Add Store Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label class="col-sm-12 col-form-label">Store Name</label>
+                                </div>
+                            </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" value="{{store.storeName}}" placeholder="Text" name="name" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-md-center">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label class="col-sm-12 col-form-label">Address</label>
+                                </div>
+                            </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <textarea class="form-control" placeholder="Address"name = "address" id="exampleFormControlTextarea1" rows="3" required>{{store.address}}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-md-center">
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label class="col-sm-12 col-form-label">Owner Name</label>
+                                    </div>
+                                </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="Text" value="{{store.ownerName}}" name="oname" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label class="col-sm-12 col-form-label">Email</label>
+                                        </div>
+                                    </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="example@gmail.com" value="{{store.email}}" name="email" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-md-center">
+                                        <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <label class="col-sm-12 col-form-label">Website</label>
+                                            </div>
+                                        </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" placeholder="storename.anything" value="{{store.website}}" name="website" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                    <div>
+                </div>
+                <button type="submit" class="btn  btn-outline-success">Update store</button>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+<!-- [ Pre-loader ] End -->
+<!-- [ navigation menu ] start -->
+<!-- [ navigation menu ] end -->
+<!-- [ Header ] start -->
+{% comment %} included in header.html {% endcomment %}
+<!-- [ Header ] end -->

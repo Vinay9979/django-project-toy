@@ -1,0 +1,47 @@
+{% extends "admin/common/layout.html" %}
+{% load static %}
+{% block content %}
+<div class="pcoded-main-container">
+    <div class="pcoded-content">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Manage Orders </h5>
+                <table class="table table-inverse">
+                    <thead>
+                        <tr>
+                            <th>order id</th>
+                            <th>customer name</th>
+                            <th>order date</th>
+                            <th>payment status</th>
+                            <th>delivery status</th>
+                            <th>total amount</th>
+                            <th>Actions</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>{{order.id}}</td>
+                            <td>{{order.customer.first_name}} {{order.customer.last_name}}</td>
+                            <td>{{order.order_date}}</td>
+                            <td>{{order.pStatus}}</td>
+                            <td>{{order.dStatus}}</td>
+                            <td>{{order.total_amount}}</td>
+                            <td><a  href="{% url 'editorder' order.id %}" class="btn btn-outline-info">Edit</a>
+                                <a  href="{% url 'deleteorder' order.id %}" class="btn btn-outline-danger">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+<!-- [ Pre-loader ] End -->
+<!-- [ navigation menu ] start -->
+
+<!-- [ navigation menu ] end -->
+<!-- [ Header ] start -->
+{% comment %} included in header.html {% endcomment %}
+<!-- [ Header ] end -->

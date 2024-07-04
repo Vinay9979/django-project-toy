@@ -1,0 +1,111 @@
+{% extends "admin/common/layout.html" %}
+{% load static %}
+{% block content %}
+<div class="pcoded-main-container">
+    <div class="pcoded-content">
+        <div class="row">
+            <div class="col-sm-12">
+            <form  method="post" action="{% url 'storecategory'%}">
+                {% csrf_token %}    
+                <div class="card text-center">
+                    <div class="card-header">
+                        <h5>ADD MAIN CATEGORY</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label class="col-sm-12 col-form-label">Category Name</label>
+                                </div>
+                            </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Text" name="categoryname" required>
+                                        {% if messages %}
+                                            {% for message in messages %}
+                                                {% if 'categoryError' in message.tags %}
+                                                    <div class="alert alert-danger" role="alert">
+                                                         {{message}}
+                                                    </div>
+                                                {% elif 'categorySuccess' in message.tags%}
+                                                    <div class="alert alert-success" role="alert">
+                                                        {{message}}
+                                                </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                    <div>
+                </div>
+                <button type="submit" class="btn  btn-outline-success">Add Category</button>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+            <form method="post" action="{% url 'storesubcategory'%}">
+                {% csrf_token %}
+                <div class="card text-center">
+                    <div class="card-header">
+                        <h5>ADD SUB-CATEGORY</h5>
+                    </div>
+                    <div class="card-body">
+                    <div class="row justify-content-md-center">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="col-sm-10 col-form-label">Select category</label>
+                               
+                            </div>
+                        </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <select id="inputState" name = "categoryName" class="form-control">
+                                        {% for category in categories  %}
+                                        <option value = "{{category.id}}">{{category.categoryName}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    <div>
+                    <div class="row justify-content-md-center">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="col-sm-20 col-form-label">Sub-category Name</label>
+                            </div>
+                        </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="subcategory" placeholder="Text" required>
+                                    {% if messages %}
+                                            {% for message in messages %}
+                                                {% if 'subcategoryerror' in message.tags %}
+                                                    <div class="alert alert-danger" role="alert">
+                                                         {{message}}
+                                                    </div>
+                                                {% elif 'subcategorysuccess' in message.tags%}
+                                                    <div class="alert alert-success" role="alert">
+                                                        {{message}}
+                                                </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    <div>
+                </div>
+                <button type="submit" class="btn  btn-outline-success">Add sub-category</button>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+<!-- [ Pre-loader ] End -->
+<!-- [ navigation menu ] start -->
+<!-- [ navigation menu ] end -->
+<!-- [ Header ] start -->
+{% comment %} included in header.html {% endcomment %}
+<!-- [ Header ] end -->

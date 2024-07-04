@@ -1,0 +1,128 @@
+{% extends "admin/common/layout.html" %}
+{% load static %}
+{% block content %}
+<div class="pcoded-main-container">
+    <div class="pcoded-content">
+        <div class="container">
+            <div class="card text-center">
+                <table class="table table-striped">
+                    <div class="card-header">
+                        {% comment %} <h5>Users Data</h5> {% endcomment %}
+                        <form action="{% url 'searchcategory' %}" method="get">
+                        <div class="row">
+                            <div class="col-sm-3">Filter :<div class="btn-group mb-2 mr-2">
+                                <button class="btn  btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{filter}}</button>
+                                <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, -2px, 0px);">
+                                    {% if filter == 'Category' %}<a class="dropdown-item" href="?filter=Subcategory">Subcategory</a>
+                                    {% elif filter == 'Subcategory'  %}
+                                    <a class="dropdown-item" href="?filter=Category">Category</a>
+                                    {% endif %}
+                                </div>
+                            </div></div>
+                            <div class="col-sm-5"><h5 class="col-sm-10 col-form-label">{{filter}} Data</div>
+                            <div class="col-sm-4"><div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Search {{filter}}" name = "category"  value="{{searched_category}}" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                <input type="hidden" name ="filter" value="{{filter}}">
+
+                                <div class="input-group-append">
+                                    <button class="btn  btn-primary"  type="Submit">Search</button>
+
+                                </div>
+                            </div></div>
+                        </div>
+                    </form>
+                    </div>
+                    <thead>
+                        <tr>
+                            <th>{{filter}} name</th>
+                            {% if filter == 'Subcategory' %}
+                            <th>categoryname</th>
+                            {% endif %}
+                            <th colspan=2>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if msg %}
+                            {% if filter == "Subcategory" %}
+                            <tr>
+                                <td colspan=4>{{msg}}</td>
+                                </tr>
+                           {% else %}
+                            <tr>
+                            <td colspan=2>{{msg}}</td>
+                            </tr>
+                        {% endif %}
+                        {% else %}
+                        {% if filter == 'Category' %}
+                        {% for category in categories  %}
+                        <tr>
+                            <td>{{category.categoryName}}</td>
+                            <td> <a href="{% url 'updatecategory' category.id %}"class="btn  btn-outline-info">Edit</a></td>
+                            <td><form action = "{% url 'deletecategory' %}" method="post">{% csrf_token %}<button type="submit" name = "delete" value = "{{category.id}}" class="btn  btn-outline-danger">Delete</button></form></td>
+                            
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        {% for category in categories  %}
+                        <tr>
+                            <td>{{category.subcategoryName}}</td>
+                            <td>{{category.category_id__categoryName }}</td>
+                            <td> <a href= "{% url 'updatesubcategory' category.id %}" class="btn  btn-outline-info">Edit</a></td>
+                            <td><form action = "{% url 'deletesubcategory' %}" method="post">{% csrf_token %}<button type="submit" name = "delete" value = "{{category.id}}" class="btn  btn-outline-danger">Delete</button></form></td>
+                            
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                        {% endif %}
+                        
+                    </tbody>
+                </table>
+                <div class="row">
+                <div class="col-sm">
+                </div>
+                <div class="col-sm">
+                <nav aria-label="Page navigation example"> 
+                    <ul class="pagination">
+                        {% if not categories.has_previous and not categories.has_next %}
+                        <li class="page-item disabled"><a class="page-link" href="?filter={{filter}}&category={{searched_category}}&page={{ categories.number }}">Previous</a></li>
+
+                        <li class="page-item disabled"><a class="page-link" href="?searched_product={{searched_product}}&page={{ categories.number }}">{{0}}  of {{0}}</a></li>
+                        <li class="page-item disabled"><a class="page-link" href="?filter={{filter}}&category={{searched_category}}&page={{ categories.number }}">Next</a></li>
+                        {% else %}
+                        {% if  categories.has_previous %}
+                        <li class="page-item active"><a class="page-link" href="?filter={{filter}}&category={{searched_category}}&page={{ categories.previous_page_number }}">Previous</a></li>
+                        {% else %}
+                        <li class="page-item disabled"><a class="page-link" href="?filter={{filter}}&category={{searched_category}}&page={{ categories.number }}">Previous</a></li>
+                        {% endif %}
+                        {% if categories.has_next %}
+                        <li class="page-item"><a class="page-link" href="?filter={{filter}}&category={{searched_category}}&page={{ categories.number }}">{{categories.number}}  of {{categories.paginator.num_pages}}</a></li>
+                        {% endif %}
+                        {% comment %} <li class="page-item"><a class="page-link" href="#!">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#!">3</a></li> {% endcomment %}
+                        {% if categories.has_next %}
+                        <li class="page-item active"><a class="page-link" href="?filter={{filter}}&category={{searched_category}}&page={{ categories.next_page_number }}">Next</a></li>
+                        {% else %}
+                        <li class="page-item"><a class="page-link" href="?filter={{filter}}&category={{searched_category}}&page={{ categories.number }}">{{categories.number}}  of {{categories.paginator.num_pages}}</a></li>
+
+                        <li class="page-item disabled"><a class="page-link" href="?filter={{filter}}&category={{searched_category}}&page={{ categories.number }}">Next</a></li>
+                        
+                        {% endif %}
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-sm">
+            </div>
+        </div>
+        
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+<!-- [ Pre-loader ] End -->
+<!-- [ navigation menu ] start -->
+<!-- [ navigation menu ] end -->
+<!-- [ Header ] start -->
+{% comment %} included in header.html {% endcomment %}
+<!-- [ Header ] end -->

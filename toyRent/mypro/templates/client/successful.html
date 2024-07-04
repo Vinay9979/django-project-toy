@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .confirmation-container {
+            margin-top: 50px;
+        }
+        .confirmation-card {
+            max-width: 600px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container confirmation-container">
+        <div class="card confirmation-card">
+            <div class="card-header bg-success text-white text-center">
+                <h2>Order Confirmation</h2>
+            </div>
+            <div class="card-body text-center">
+                <h4 class="card-title">Thank you for your order!</h4>
+                <p class="card-text">Your order has been successfully placed.</p>
+                <p class="card-text"><strong>Order ID:</strong> {{ orderId}}</p>
+                <p class="card-text"><strong>Total Amount:</strong> ${{ totalAmount }}</p>
+                <a href="{% url 'home'%}" class="btn btn-primary mt-3">Continue Shopping</a>
+                <a href="/order-details/{{ order.id }}" class="btn btn-secondary mt-3">View Order Details</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

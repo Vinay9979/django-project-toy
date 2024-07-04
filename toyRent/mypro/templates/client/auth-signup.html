@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<title>Flat Able - Premium Admin Template by Phoenixcoded</title>
+	<!-- HTML5 Shim and Respond.js' %} IE11 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js' %} doesn't work if you view the page via file:// -->
+	<!--[if lt IE 11]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js' %}"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js' %}/1.4.2/respond.min.js' %}"></script>
+		<![endif]-->
+	<!-- Meta -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="description" content="" />
+	<meta name="keywords" content="">
+	<meta name="author" content="Phoenixcoded" />
+	<!-- Favicon icon -->
+	<link rel="icon" href="{% static 'admin/images/favicon.ico' %}" type="image/x-icon">
+
+	<!-- vendor css -->
+	<link rel="stylesheet" href="{% static 'admin/css/style.css' %}">
+	
+	
+
+
+</head>
+
+<!-- [ auth-signup ] start -->
+<div class="auth-wrapper">
+	<div class="auth-content text-center">
+		<img src="{% static 'admin/images/logo.png' %}" alt="" class="img-fluid mb-4">
+		<div class="card borderless">
+			<div class="row align-items-center text-center">
+				<div class="col-md-12">
+					<div class="card-body">
+						<form method="post" action={% url 'checksignup'%}>
+							{% csrf_token %}
+						<h4 class="f-w-400">Sign up</h4>
+						<hr>
+						<div class="form-group mb-3">
+							<input type="text" class="form-control" id="Username" name = "firstName" value = "{{firstName}}" placeholder="firstname">
+						</div>
+						<div class="form-group mb-3">
+							<input type="text" class="form-control" id="Username" name = "lastName" value="{{lastName}}" placeholder="lastname">
+						</div>
+						<div class="form-group mb-3">
+							<input type="text" class="form-control" id="Username" name="username" value="{{username}}" placeholder="Username">
+						</div>
+						{% if userExists %}
+						<div class="form-group mb-3">
+							<div class="alert alert-danger" role="alert">
+								{{userExists}}
+						   </div>
+						</div>
+					{% endif %}
+						<div class="form-group mb-3">
+							<input type="text" class="form-control" id="Email" name = "email" value = "{{email}}" placeholder="Email address">
+						</div>
+					
+						{% if validateEmail %}
+							{% for error in validateEmail  %}
+							<div class="form-group mb-4">
+								<div class="alert alert-danger" role="alert">
+									{{error}}
+								</div>
+							</div>
+							{% endfor %}
+						{% endif %}
+						<div class="form-group mb-4">
+							<input type="password" class="form-control" id="Password" name= "password" value = "{{password}}" placeholder="Password">
+						</div>
+						<div class="form-group mb-4">
+							<input type="password" class="form-control" id="Password" name="confirmPassword" value = "{{confirmPassword}}" placeholder="confirm password">
+						</div>
+						{% if messages %}
+						{% for msg in messages  %}
+							{% if 'dontmatch' in msg.tags %}
+							<div class="form-group mb-4">
+								<div class="alert alert-danger" role="alert">
+									{{msg}}
+								</div>
+							</div>
+							{% elif 'validateerror' in msg.tags%}
+							<div class="form-group mb-4">
+								<div class="alert alert-danger" role="alert">
+									{{msg}}
+								</div>
+							</div>
+							{% endif %}
+						{% endfor %}
+						{% endif %}
+						{% if validate %}
+							{% for error in validate  %}
+							<div class="form-group mb-4">
+								<div class="alert alert-danger" role="alert">
+									{{error}}
+								</div>
+							</div>
+							
+							{% endfor %}
+						{% endif %}
+						<button type = "submit" class="btn btn-primary btn-block mb-4">Sign up</button>
+						<hr>
+						<p class="mb-2">Already have an account? <a href="{% url 'signin' %}" class="f-w-400">Signin</a></p>
+					</form>
+					</div>
+				</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>
+<!-- [ auth-signup ] end -->
+
+<!-- Required Js -->
+<script src="{% static 'admin/js/vendor-all.min.js' %}"></script>
+<script src="{% static 'admin/js/plugins/bootstrap.min.js' %}"></script>
+
+<script src="{% static 'admin/js/pcoded.min.js' %}"></script>
+
+
+
+</body>
+
+</html>

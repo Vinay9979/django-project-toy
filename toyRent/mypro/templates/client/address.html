@@ -1,0 +1,152 @@
+{% extends "client/common/layout.html" %}
+{% load static %}
+
+{% block content %}
+    <!-- Breadcrumb Start -->
+    {% include "client/common/breadcrumb.html" %}
+    <!-- Breadcrumb End -->
+
+
+
+    <!-- Checkout Start -->
+    
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-lg-8">
+                <form action="{% url 'getAddresses'%}" method="post">
+                    {% csrf_token %}
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span></h5>
+                <div class="bg-light p-30 mb-5">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>First Name</label>
+                            <input class="form-control" type="text" name="bfirstName" value="{{billingAddress.firstName}}" placeholder="John" required="required"
+                            data-validation-required-message="Please enter your first name">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Last Name</label>
+                            <input class="form-control" type="text" name="blastName" value="{{billingAddress.lastName}}" placeholder="Doe" required="required"
+                            data-validation-required-message="Please enter your last name">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>E-mail</label>
+                            <input class="form-control" type="text" name="bemail" value="{{billingAddress.email}}" placeholder="example@email.com" required="required"
+                            data-validation-required-message="Please enter your e-mail">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Mobile No</label>
+                            <input class="form-control" type="text" name="bmobile" value="{{billingAddress.mobile}}" placeholder="+123 456 789" required="required"
+                            data-validation-required-message="Please enter your mobile number">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Address Line 1</label>
+                            <input class="form-control" type="text" name = "bad1" value="{{sba.0}}" placeholder="123 Street" required="required"
+                            data-validation-required-message="Please enter your address">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Address Line 2</label>
+                            <input class="form-control" type="text" name = "bad2" value="{{sba.1}}"placeholder="123 Street">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Country</label>
+                            <select name ="bcountry"  class="custom-select">
+                                <option value="india" {%if sba.2 == "india" %} selected {% endif %}>India</option>
+                                <option value="usa" {%if sba.2 == "usa" %} selected {% endif %}>usa</option>
+                                <option value="china" {%if sba.2 == 'china'%} selected {% endif %}>china</option>
+                                <option value="nepal" {%if sba.2 == 'nepal'%} selected {% endif %}>nepal</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>City</label>
+                            <input class="form-control" type="text" name = "bcity" value="{{sba.3}}" placeholder="New York">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>State</label>
+                            <input class="form-control" type="text" name="bstate" value="{{sba.4}}" placeholder="New York">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>ZIP Code</label>
+                            <input class="form-control" type="text" name="bzipcode" value="{{sba.5}}" placeholder="123">
+                        </div>
+                        {% for msg in messages  %}
+                            {% if 'error'  == msg.tags %}
+                            <div class="alert alert-danger" role="alert">
+                                {{msg}}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="col-md-12 form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="sameaddress" value = "sameaddress" class="custom-control-input" id="newaccount">
+                                <label class="custom-control-label" for="newaccount">Mark billing address as delivery address </label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="diffentaddress" value ="differentaddress" class="custom-control-input" id="shipto">
+                                <label class="custom-control-label" for="shipto"  data-toggle="collapse" data-target="#shipping-address">Ship to different address</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="collapse mb-5" id="shipping-address">
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Shipping Address</span></h5>
+                    <div class="bg-light p-30">
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label>First Name</label>
+                                <input class="form-control" type="text"  name="firstName" value="{{billingAddress.firstName}}" placeholder="John">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Last Name</label>
+                                <input class="form-control" type="text" name="lastName" value="{{billingAddress.lastName}}" placeholder="Doe">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>E-mail</label>
+                                <input class="form-control" type="text" name="email"  value="{{billingAddress.email}}" placeholder="example@email.com">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Mobile No</label>
+                                <input class="form-control" type="text" name = "mobile" value="{{billingAddress.mobile}}" placeholder="+123 456 789">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Address Line 1</label>
+                                <input class="form-control" type="text" name = "ad1" value="{{ssa.0}}" placeholder="123 Street">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Address Line 2</label>
+                                <input class="form-control" type="text" name="ad2" value="{{ssa.1}}"placeholder="123 Street">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Country</label>
+                                <select name="country" class="custom-select">
+                                    <option value="india"selected>India</option>
+                                    <option value="usa">usa</option>
+                                    <option value="china">china</option>
+                                    <option value="nepal">nepal</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>City</label>
+                                <input class="form-control" type="text" name="city" value="{{ssa.3}}" placeholder="New York">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>State</label>
+                                <input class="form-control" type="text" name="state" value="{{ssa.4}}"placeholder="New York">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>ZIP Code</label>
+                                <input class="form-control" type="text" name="zipcode" value="{{ssa.5}}" placeholder="123">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-block btn-primary font-weight-bold py-3">save address</button>
+            </form>
+            </div>
+            
+        </div>
+    </div>
+    <!-- Checkout End -->
+
+{% endblock content %}

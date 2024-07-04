@@ -1,0 +1,85 @@
+{% extends "admin/common/layout.html" %}
+{% load static %}
+{% block content %}
+<div class="pcoded-main-container">
+    <div class="pcoded-content">
+        <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Order Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-5">
+                        <p class="card-text">Customer name : {{order.customer.first_name}} {{order.customer.last_name}}</p>
+                            </div>
+                            <hr/>
+                            <div class="col-sm-4">
+                                Order Date:
+                                {{order.order_date}}
+                                    </div>
+                            <div class="col-sm-3">
+                                Order Id:
+                                {{order.id}}
+                                    </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-7 text-right">
+                        <p class="card-text">Payment Status: {% if order.payment_status == 'P' %} Pending {% elif order.payment_status == 'C' %} Completed {% elif order.payment_status == 'F' %} Failed {% elif order.payment_status == 'P' %} Refunded {% endif %}</p>
+                            </div>
+                            <hr/>
+                            <div class="col-sm-5 text-middle">
+                                Delivery status:
+                                {% if order.delivery_status == 'P' %} Pending {% elif order.delivery_status == 'D' %} Delivered {% elif order.delivery_status == 'OD' %} Out for delivery {% elif order.delivery_status == 'R' %} Returned {% endif %}
+                                    </div>
+                        </div>
+                    <hr/>
+                        <div class="row">
+                            <div class="col-sm-3">
+                           Products:
+                            </div>
+                            <div class="col-sm-3 text-left">
+                                Quantity:
+                                 </div>
+                            <div class="col-sm-3">
+                                Product price:
+                       
+                                    </div>
+                            <div class="col-sm-3">
+                                sub-total:
+                               
+                                    </div>
+                        </div>
+                        {% for product in orderdetails  %}
+                        <hr/>
+                        <div class="row">
+                            <div class="col-sm-3">
+                            {{product.toyid.name}}
+                            </div>
+                            <div class="col-sm-3 text-left">
+                                {{product.quantity}}
+                                </div>
+                            <div class="col-sm-3">
+                                {{product.toyid.purchasePrice}}
+                                    </div>
+                            <div class="col-sm-3">
+                                {{product.subtotal}}
+                                    </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <hr/>
+                    
+                    <div class="row">
+                        <div class="col-sm-9">
+                        </div>
+                        <div class="col-sm-3">
+                            <p class="card-text">Total: {{order.total_amount}}</p>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,32 @@
+<!-- templates/payment.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Razorpay Payment</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+    <h1>Pay with Razorpay</h1>
+    <form action="{% url 'paymenthandler' %}" method="POST">
+        <script
+            src="https://checkout.razorpay.com/v1/checkout.js"
+            data-key="{{ razorpay_key }}"
+            data-amount="{{ amount }}"
+            data-currency="INR"
+            data-order_id="{{ order_id }}"
+            data-buttontext="Pay with Razorpay"
+            data-name="{{ name }}"
+            data-description="{{ description }}"
+            data-prefill.name="{{ prefill.name }}"
+            data-prefill.email="{{ prefill.email }}"
+            data-prefill.contact="{{ prefill.contact }}"
+            data-theme.color="{{ theme.color }}"
+            data-method="{{ method }}"
+            data-upi.vpa="{{ upi.vpa }}"
+        ></script>
+        <input type="hidden" name="order_id" value="{{ order_id }}">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    </form>
+</body>
+</html>
