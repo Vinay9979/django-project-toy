@@ -604,7 +604,7 @@ def searchproduct(request):
                 products = Toy.objects.filter(Q(name__icontains=name) | Q(categoryId__categoryName__icontains=name)|Q(subcategoryId__subcategoryName__icontains=name)).annotate(increasedPrice=Round(F('purchasePrice') * 1.2, 2,output_field=DecimalField(max_digits=10, decimal_places=2))).values('img_url','name','purchasePrice','id','increasedPrice').order_by(filter)
             else:
                 pricerange = pricerange.split('-')
-                products = Toy.objects.filter((Q(name__icontains=name) | Q(categoryId__categoryName__icontains=name)) & (Q(purchasePrice__gte = int(pricerange[0])) & Q(purchasePrice__lte = int(pricerange[1])))).annotate(increasedPrice=Round(F('purchasePrice') * 1.2, 2,output_field=DecimalField(max_digits=10, decimal_places=2))).values('img_url','name','purchasePrice','id','increasedPrice').order_by(filter)
+                products = Toy.objects.filter((Q(name__icontains=name) | Q(categoryId__categoryName__icontains=name)|Q(subcategoryId__subcategoryName__icontains=name)) & (Q(purchasePrice__gte = int(pricerange[0])) & Q(purchasePrice__lte = int(pricerange[1])))).annotate(increasedPrice=Round(F('purchasePrice') * 1.2, 2,output_field=DecimalField(max_digits=10, decimal_places=2))).values('img_url','name','purchasePrice','id','increasedPrice').order_by(filter)
             counts,totaltoys = countprice(request,name)
             totaltoys= products.count()
             paginator = Paginator(products, 3)
@@ -649,7 +649,7 @@ def searchproduct(request):
             filter = request.GET.get('filter')
             pricerange = pricerange
             if pricerange =='all':
-                products = Toy.objects.filter(Q(name__icontains = name) |  Q(categoryId__categoryName__icontains=name)).annotate(increasedPrice=Round(F('purchasePrice') * 1.2, 2,output_field=DecimalField(max_digits=10, decimal_places=2))).values('img_url','name','purchasePrice','id','increasedPrice')
+                products = Toy.objects.filter(Q(name__icontains = name) |  Q(categoryId__categoryName__icontains=name )|Q(subcategoryId__subcategoryName__icontains=name)).annotate(increasedPrice=Round(F('purchasePrice') * 1.2, 2,output_field=DecimalField(max_digits=10, decimal_places=2))).values('img_url','name','purchasePrice','id','increasedPrice')
                 totaltoys= products.count()
                 paginator = Paginator(products, 3)
                 page_number = request.GET.get('page')
@@ -689,7 +689,7 @@ def searchproduct(request):
                 return render(request,'client/shop.html',context)
             else:
                 pricerange = pricerange.split('-')
-                products = Toy.objects.filter( (Q(name__icontains=name) |   Q(categoryId__categoryName__icontains=name)) &( Q(purchasePrice__gte = int(pricerange[0])) & Q(purchasePrice__lte = int(pricerange[1])))).annotate(increasedPrice=Round(F('purchasePrice') * 1.2, 2,output_field=DecimalField(max_digits=10, decimal_places=2))).values('img_url','name','purchasePrice','id','increasedPrice')
+                products = Toy.objects.filter( (Q(name__icontains=name) |   Q(categoryId__categoryName__icontains=name)|Q(subcategoryId__subcategoryName__icontains=name)) &( Q(purchasePrice__gte = int(pricerange[0])) & Q(purchasePrice__lte = int(pricerange[1])))).annotate(increasedPrice=Round(F('purchasePrice') * 1.2, 2,output_field=DecimalField(max_digits=10, decimal_places=2))).values('img_url','name','purchasePrice','id','increasedPrice')
                 totaltoys= products.count()
                 paginator = Paginator(products, 3)
                 page_number = request.GET.get('page')
@@ -720,7 +720,7 @@ def searchproduct(request):
         elif 'name' in request.GET and 'filter' in request.GET:
             name = request.GET.get('name')
             filter = request.GET.get('filter')
-            products = Toy.objects.filter(Q(name__icontains=name) | Q(categoryId__categoryName__icontains=name)).annotate(increasedPrice=Round(F('purchasePrice') * 1.2, 2,output_field=DecimalField(max_digits=10, decimal_places=2))).values('img_url','name','purchasePrice','id','increasedPrice').order_by(filter)
+            products = Toy.objects.filter(Q(name__icontains=name) | Q(categoryId__categoryName__icontains=name)|Q(subcategoryId__subcategoryName__icontains=name)).annotate(increasedPrice=Round(F('purchasePrice') * 1.2, 2,output_field=DecimalField(max_digits=10, decimal_places=2))).values('img_url','name','purchasePrice','id','increasedPrice').order_by(filter)
             paginator = Paginator(products, 3)
             page_number = request.GET.get('page')
             page_obj = paginator.get_page(page_number)
@@ -786,7 +786,7 @@ def searchproduct(request):
             return render(request,'client/shop.html',context)
         elif 'name' in request.GET:
             name = request.GET.get('name')
-            products = Toy.objects.filter(Q(name__icontains=name) | Q(categoryId__categoryName__icontains=name)).annotate(increasedPrice=Round(F('purchasePrice') * 1.2, 2,output_field=DecimalField(max_digits=10, decimal_places=2))).values('img_url','name','purchasePrice','id','increasedPrice')
+            products = Toy.objects.filter(Q(name__icontains=name) | Q(categoryId__categoryName__icontains=name)|Q(subcategoryId__subcategoryName__icontains=name)).annotate(increasedPrice=Round(F('purchasePrice') * 1.2, 2,output_field=DecimalField(max_digits=10, decimal_places=2))).values('img_url','name','purchasePrice','id','increasedPrice')
             totaltoys= products.count()
             paginator = Paginator(products, 3)
             page_number = request.GET.get('page')
