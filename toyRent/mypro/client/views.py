@@ -347,7 +347,9 @@ def getAddresses(request):
     joinaddress = '->'.join(fulladdress)
     diffenentaddress = request.POST.get('differentaddress')
     sameaddress = request.POST.get('sameaddress')
- 
+    print(diffenentaddress)
+    print(sameaddress)
+    print(request.POST.get)
     if not sameaddress and not diffenentaddress :
         firstname = request.POST.get('firstName')
         lastName = request.POST.get('lastName')
