@@ -11,6 +11,9 @@ from .customfunction import SubstringBefore
 from django.core.paginator import Paginator
 from datetime import datetime
 from adminside.models import Categoryphotos 
+import razorpay
+
+client  = razorpay.Client(auth=())
 
 # Create your views here.
 
@@ -21,7 +24,7 @@ def checklogin(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
     authuser = auth.authenticate(username=username, password=password)
-    print("authuser",authuser)
+
     if authuser is not None:
         if authuser.is_superuser:
             auth.login(request, authuser)
@@ -113,7 +116,6 @@ def storetoy(request):
             subcategories = Subcategory.objects.all()
             stores = Store.objects.all()
             manufacturers =  Manufacturer.objects.all()
-            print(afr,afp)
             if afp and afr:
                 context = {
                     'toyname':toyname,
@@ -252,8 +254,6 @@ def showtoys(request):
     paginator = Paginator(toys, 5)
     page_number = request.GET.get('page')
     toys = paginator.get_page(page_number)
-    for toy in toys:
-        print(toy)
     context={
         'toys':toys
     }
@@ -261,11 +261,9 @@ def showtoys(request):
 @login_required(login_url='/admin/login/')
 def searchtoy(request):
     name = request.GET.get('searched_product')
-    print("name:",name)
     if name is None:
         return redirect('showtoys')
     if name.lower() =='rentable':
-        print("name:",name)
         rentable=True
         toysQuery = Toy.objects.annotate(first_line=SubstringBefore(F('description'))).filter(isRentable=rentable).values('id','name','first_line','img_url')
         paginator = Paginator(toysQuery, 5)
@@ -304,7 +302,7 @@ def searchtoy(request):
         paginator = Paginator(toysQuery, 5)
         page_number = request.GET.get('page')
         toys = paginator.get_page(page_number)
-        print('toys:',toys)
+    
         if toys:
             context={
                 'toys':toys,
@@ -333,7 +331,6 @@ def deleteorder(request,id):
 @login_required(login_url='/admin/login/')
 def editorder(request,id):
     order = Order.objects.get(pk=id)
-    print('orderid=',order.id)
     orderDetails = OrderDetails.objects.filter(orderid = order.id)
     context={
         'order':order,
@@ -526,17 +523,14 @@ def storecategory(request):
 def updatecategory(request,id):
     if request.method=='POST':
         categoryName= request.POST.get('categoryname')
-        # print(category)
         category = Category.objects.filter(categoryName=categoryName)
         if category:
             messages.error(request,'Category already exists',extra_tags='categoryupdated')
             return redirect('updatecategory',id)
         else:
             category  =Category.objects.get(pk=id)
-            # print(type(category),type())
             category.categoryName = categoryName
             category.save()
-            # print()
             messages.success(request,'Category updated successfully',extra_tags='categoryupdated')
             return redirect('updatecategory',id)
     else:
@@ -549,11 +543,8 @@ def updatecategory(request,id):
 @login_required(login_url='/admin/login/')
 def updatesubcategory(request,id):
     if request.method=='POST':
-        print(request.POST)
         categoryName= request.POST.get('categoryName')
-        print("---------->",categoryName)
         subcategory= request.POST.get('subcategory')
-        # print(category)
         sCategory = Subcategory.objects.filter(category=categoryName,subcategoryName=subcategory)
         if sCategory:
             messages.error(request,'Subcategory already exists',extra_tags='categoryupdated')
@@ -564,7 +555,6 @@ def updatesubcategory(request,id):
             sCategory.subcategoryName= subcategory
             sCategory.lastModifiedDate = datetime.now()
             sCategory.save()
-            # print()
             messages.success(request,'Subcategory updated successfully',extra_tags='categoryupdated')
             return redirect('updatesubcategory',id)
     else:
@@ -635,7 +625,6 @@ def searchcategory(request):
                 'searched_category':category
             }
                  return render(request,'admin/showcategory.html',context)
-            # print(categories)
             context={
                 'categories':categories,
                 'filter': filter,
@@ -719,7 +708,6 @@ def manageorders(request):
 def showusers(request):
     if 'username' in request.GET:
         name = request.GET.get('username')
-        print(name)
         users_data = User.objects.filter(username__icontains=name).values('username', 'first_name', 'last_name','is_superuser').all()
         if users_data.exists():
             context={
@@ -748,7 +736,6 @@ def showusers(request):
 def edituser(request):
     editUser = request.POST.get('edit')
     deleteUser = request.POST.get('delete')
-    print('edit:',editUser)
     if editUser:
         return redirect('addtoy')
     else:
