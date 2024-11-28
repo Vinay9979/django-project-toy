@@ -20,10 +20,11 @@ from adminside.models import Categoryphotos
 def signin(request):
     return render(request,'client/auth-signin.html')
 
-def checksignin(request):
+# validates user's credentials
+def checksignin(request):    
     username = request.POST.get('username')
     password = request.POST.get('password')
-    user = auth.authenticate(username=username,password=password)
+    user = auth.authenticate(username=username,password=password) 
     if user is not None:
        if user.is_superuser:
            messages.error(request, '*Please check username or password.')
@@ -38,10 +39,12 @@ def checksignin(request):
 def signout(request):
      auth.logout(request)
      return redirect('signin')
+
 def signup(request):
     context={}
     return render(request,'client/auth-signup.html',context)
 
+# checks and validates user information in signup form 
 def checksignup(request):
     if request.method=='POST':
         firstName = request.POST.get('firstName')
@@ -52,7 +55,6 @@ def checksignup(request):
         confirmPassword = request.POST.get('confirmPassword')
         userExists = User.objects.filter(username=username).exists()
         if userExists:
-
             context={
                     'firstName':firstName,
                     'lastName':lastName,
@@ -119,6 +121,7 @@ def checksignup(request):
     else:
          return redirect('signup')
 
+# checks if user can add  more quentity of a product in  cart section checks realtime stock 
 @login_required(login_url='/client/signin')
 def addtocart(request,id):
     stock  = Toy.objects.filter(pk=id).values('stockQuantity','name')
@@ -179,7 +182,7 @@ def addtocart(request,id):
          messages.error(request,f'This product is currently out of stock please check again latter')
          return redirect('detail',id)
 
-
+# when user adds product to  cart for the first time checks stock for realtime
 @login_required(login_url='/client/signin')
 def cartadd(request,id):
     uId = request.user.id   
@@ -196,26 +199,26 @@ def cartadd(request,id):
         return redirect('cart')
 
 
+# renders index page
 @login_required(login_url='/client/signin')
 def home(request):
     toys  = Toy.objects.only('id','name','img_url','purchasePrice').annotate(
-    increasedPrice=Round(F('purchasePrice') * 1.2, 2,output_field=DecimalField(max_digits=10, decimal_places=2))
-)
+    increasedPrice=Round(F('purchasePrice') * 1.2, 2,output_field=DecimalField(max_digits=10, decimal_places=2)))
     posterList = []
     posters = Categoryphotos.objects.all()
     for category in posters:
         count = Toy.objects.filter(categoryId=category.category)
         count  = count.count()
         posterList.append([category.imgUrl,category.category.categoryName,count])
-
    
     context={
         'toys':toys,
-        'home':True,
+        'home':True,    
         'posters':posterList
     }
     return render(request,'client/index.html',context)
 
+# renders contacts pages and also store information if user fills contact form
 @login_required(login_url='/client/signin')
 def contact(request):
     if request.method=='POST':
@@ -230,6 +233,7 @@ def contact(request):
     }
     return render(request,'client/contact.html',context)
 
+# renders toys full information with details 
 @login_required(login_url='/client/signin')
 def detail(request,id):
     toyid = id
@@ -243,6 +247,7 @@ def detail(request,id):
     }
     return render(request,'client/detail.html',context)
 
+# renders the products page with custom pagination
 @login_required(login_url='/client/signin')
 def shop(request):
     products = Toy.objects.annotate(increasedPrice=Round(F('purchasePrice') * 1.2, 2,output_field=DecimalField(max_digits=10, decimal_places=2))).values('img_url','name','purchasePrice','id','increasedPrice')
@@ -256,6 +261,7 @@ def shop(request):
     }
     return render(request,'client/shop.html',context)
 
+# renders cart page with all products added by user
 @login_required(login_url='/client/signin')
 def cart(request):
     id=request.user.id
@@ -282,6 +288,8 @@ def cart(request):
             'total':0
        }
        return render(request,'client/cart.html',context)
+    
+# deletes cart items when user removes it from cart
 @login_required(login_url='/client/signin')
 def deletecartitem(request,id):
     uId = request.user.id
@@ -289,6 +297,7 @@ def deletecartitem(request,id):
     cart.delete()
     return redirect('cart')
 
+# removes cart item by one
 @login_required(login_url='/client/signin')
 def cartremove(request,id):
     uId = request.user.id
@@ -300,8 +309,7 @@ def cartremove(request,id):
         cart.save()
     return redirect('cart')
 
-
-
+# 
 @login_required(login_url='/client/signin')
 def address(request):
     id = request.user.id
@@ -347,9 +355,6 @@ def getAddresses(request):
     joinaddress = '->'.join(fulladdress)
     diffenentaddress = request.POST.get('differentaddress')
     sameaddress = request.POST.get('sameaddress')
-    print(diffenentaddress)
-    print(sameaddress)
-    print(request.POST.get)
     if not sameaddress and not diffenentaddress :
         firstname = request.POST.get('firstName')
         lastName = request.POST.get('lastName')
