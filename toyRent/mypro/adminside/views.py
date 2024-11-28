@@ -65,10 +65,8 @@ def storetoy(request):
     toydescription  = request.POST.get('toydiscription')
     afp  = request.POST.get('availableforpurchase')
     purchaseprice  = request.POST.get('purchaseprice')
-
     afr  = request.POST.get('availableforrent')
     rentprice  = request.POST.get('rentprice')
-  
     quantity  = request.POST.get('quantity')
     category  = request.POST.get('category')
     subcategory  = request.POST.get('subcategory')

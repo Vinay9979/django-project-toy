@@ -309,7 +309,7 @@ def cartremove(request,id):
         cart.save()
     return redirect('cart')
 
-# 
+# sends the previous saved address if added else nothing
 @login_required(login_url='/client/signin')
 def address(request):
     id = request.user.id
@@ -335,6 +335,7 @@ def address(request):
     }
     return render(request,'client/address.html',context)
 
+# stores the address 
 @login_required(login_url='/client/signin')
 def getAddresses(request):
     id = request.user.id
@@ -355,7 +356,7 @@ def getAddresses(request):
     joinaddress = '->'.join(fulladdress)
     diffenentaddress = request.POST.get('differentaddress')
     sameaddress = request.POST.get('sameaddress')
-    if not sameaddress and not diffenentaddress :
+    if not sameaddress and not diffenentaddress : # checks if user has forgoton to click on any of choice 
         firstname = request.POST.get('firstName')
         lastName = request.POST.get('lastName')
         email = request.POST.get('email')
@@ -379,8 +380,9 @@ def getAddresses(request):
         }
         messages.error(request,'please select any of this one')
         return render(request,'client/address.html',context)
+    
     uId= request.user.id
-    if billAddress:
+    if billAddress:   # updates the billing address if exists else creates new one
         defaults={
             'uId_id':uId,
             'firstName':bfirstname,
@@ -391,7 +393,7 @@ def getAddresses(request):
         }
         Billingaddress.objects.update_or_create(uId=id,defaults=defaults)
     else:
-         Billingaddress.objects.create(uId_id = uId,firstName=bfirstname,lastName=blastName,email=bemail,mobile=bmobile,address=joinaddress)
+        Billingaddress.objects.create(uId_id = uId,firstName=bfirstname,lastName=blastName,email=bemail,mobile=bmobile,address=joinaddress)
     if shipAddress:
         if sameaddress:
             defaults={
@@ -896,7 +898,7 @@ def countprice(request,name):
         (10000, None)  # None means no upper limit
     ]
 
-    # Prepare a dictionary to hold the counts
+    # stores count of toys per price range 
     counts = {}
 
     for lower, upper in price_ranges:
