@@ -449,6 +449,7 @@ def getAddresses(request):
             Deliveryaddress.objects.create(uID_id=uId,irstName=firstname,lastName=lastName,email=email,mobile=mobile,address=sFulladdress)
             return redirect('checkout')
 
+# sends whole address
 @login_required(login_url='/client/signin')
 def checkout(request):
     id = request.user.id
@@ -576,9 +577,10 @@ def checkpaymentmethod(request):
 #     else:
 #         return JsonResponse({'status': 'Invalid request method'})
 
+# search product it works by name, pricerange and sort
 @login_required(login_url='/client/signin')
 def searchproduct(request):
-        if 'pricerange' in request.GET:
+        if 'pricerange' in request.GET: # changes pricerange according to latest selection
                 pricerange= request.GET.getlist('pricerange')
                 if 'pricerange' not in request.session:
                     request.session['pricerange'] = pricerange[-1]
@@ -887,7 +889,8 @@ def searchproduct(request):
                 }
 
             return render(request,'client/shop.html',context)
-            
+
+
 def countprice(request,name):
     product = name
     price_ranges = [
@@ -933,6 +936,7 @@ def zerocount():
     alltoys = 0
     return countList,alltoys
 
+# checks if products are added in cart or not 
 def checkquantity(request):
     id = request.user.id
     cart = Cart.objects.filter(user=id)
