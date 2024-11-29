@@ -644,7 +644,7 @@ def searchproduct(request):
                     }
 
             else:
-                counts,totaltoys = list(zerocount())
+                counts,totaltoys = zerocount()
                 context={
                     'searched_product':name,
                     'filter':filter,

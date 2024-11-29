@@ -15,11 +15,11 @@ import razorpay
 
 client  = razorpay.Client(auth=())
 
-# Create your views here.
-
+# renders login page
 def login(request):
     return render(request,'admin/auth-signin.html')
 
+# validates form data for login
 def checklogin(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
@@ -35,7 +35,8 @@ def checklogin(request):
     else:
          messages.error(request, '*Please check username or password.')
          return redirect('login')
-
+    
+# log out user and redirects to login
 @login_required(login_url='/admin/login/')
 def logout(request):
     auth.logout(request)
@@ -45,6 +46,7 @@ def logout(request):
 def index(request):
     return render(request,'admin/index.html')
 
+# used to send all information to fill a form to add a toy for eg. add category and subcategory etc.
 @login_required(login_url='/admin/login/')
 def addtoy(request):
     category = Category.objects.all()
@@ -59,6 +61,7 @@ def addtoy(request):
     }
     return render(request,'admin/addtoy.html',context)
 
+# validates all information comes from toy form and stores into database.
 @login_required(login_url='/admin/login/')
 def storetoy(request):
     toyname  = request.POST.get('toyname')
@@ -72,7 +75,7 @@ def storetoy(request):
     subcategory  = request.POST.get('subcategory')
     store  = request.POST.get('store')
     manufacturer  = request.POST.get('manufacturer')
-    if 'toyimage' in request.FILES:
+    if 'toyimage' in request.FILES: # to check if image has been sent or not and validate image 
         image = request.FILES['toyimage']
         ext = ['png','jpg','jpeg']
         imgext = image.name.split('.')
@@ -246,6 +249,7 @@ def storetoy(request):
             return render(request,'admin/addtoy.html',context)
 
 
+
 @login_required(login_url='/admin/login/')
 def showtoys(request):
     toys = Toy.objects.annotate(first_line=SubstringBefore(F('description'))).values('id','name','first_line','img_url')
@@ -314,17 +318,20 @@ def searchtoy(request):
             }
             return render(request,'admin/showtoys.html',context)
 
+# removes toys details from database
 @login_required(login_url='/admin/login/')
 def deletetoy(request,id):
     toy = Toy.objects.get(pk=id)
     toy.delete()
     return redirect('showtoys')
 
+# deletes order
 @login_required(login_url='/admin/login/')
 def deleteorder(request,id):
     order = Order.objects.get(pk=id)
     order.delete()
     return redirect('manageorders')
+
 
 @login_required(login_url='/admin/login/')
 def editorder(request,id):
@@ -336,6 +343,7 @@ def editorder(request,id):
     }
     return render(request,'admin/orderdetails.html',context)
 
+# sends details to edin toy details
 @login_required(login_url='/admin/login/')
 def edittoy(request,id):
     toy = Toy.objects.get(pk=id)
@@ -352,6 +360,7 @@ def edittoy(request,id):
     }
     return render(request,'admin/edittoy.html',context)
 
+# validates toy details and stores in database
 def updatetoy(request,id):
     toyname  = request.POST.get('toyname')
     toydescription  = request.POST.get('toydiscription')
@@ -497,6 +506,7 @@ def updatetoy(request,id):
               messages.success(request,'toy updated successfully',extra_tags='toyupdated')
               return redirect('showtoys')
 
+# renders add category page 
 @login_required(login_url='admin/login/')
 def addcategory(request):
     categories =  Category.objects.values('id','categoryName').order_by('id')
@@ -504,7 +514,8 @@ def addcategory(request):
         'categories' : categories
     }
     return render(request,'admin/addcategory.html',context)
-    
+
+# validates or creates category name 
 @login_required(login_url='/admin/login/')
 def storecategory(request):
         name = request.POST['categoryname']
@@ -517,6 +528,7 @@ def storecategory(request):
             messages.success(request, 'Category added successfully!',extra_tags='categorySuccess')
             return redirect('addcategory')
         
+# validates or updates  the category name
 @login_required(login_url='/admin/login/')
 def updatecategory(request,id):
     if request.method=='POST':
@@ -538,6 +550,7 @@ def updatecategory(request,id):
         }
         return render(request,'admin/updatecategory.html',context)
 
+# validates or updates subcategory name
 @login_required(login_url='/admin/login/')
 def updatesubcategory(request,id):
     if request.method=='POST':
@@ -563,8 +576,8 @@ def updatesubcategory(request,id):
             'categories':category
         }
         return render(request,'admin/updatesubcategory.html',context)
-    
 
+# validates or stores subcategory
 @login_required(login_url='/admin/login/')
 def storesubcategory(request):
     name = request.POST['subcategory']
@@ -578,6 +591,7 @@ def storesubcategory(request):
         messages.success(request, 'Sub-category added successfully!',extra_tags='subcategorysuccess')
         return redirect('addcategory')
 
+# used to show category also by filter 
 @login_required(login_url='/admin/login/')
 def showcategory(request):
     if 'filter' in request.GET:
@@ -605,7 +619,8 @@ def showcategory(request):
                 'filter':'Category'
             }
         return render(request,'admin/showcategory.html',context)
-    
+
+# search category
 @login_required(login_url='/admin/login/')
 def searchcategory(request):
     if 'filter' and 'category' in request.GET:
@@ -653,7 +668,8 @@ def searchcategory(request):
             return redirect('showsubcategory')
         else:
             return redirect('showcategory')
-        
+
+# used to show category also by filter 
 @login_required(login_url='/admin/login/')
 def showsubcategory(request):
     if 'filter' in request.GET:
@@ -670,6 +686,7 @@ def showsubcategory(request):
             }
     return render(request,'admin/showcategory.html',context)
 
+# deletes category from database.
 @login_required(login_url='/admin/login/')
 def deletecategory(request):
     category = request.POST.get('delete')
@@ -677,7 +694,7 @@ def deletecategory(request):
     category.delete()
     return redirect('showcategory')
 
-
+# deletes subcategory from database.
 @login_required(login_url='/admin/login/')
 def deletesubcategory(request):
     subcategory = request.POST.get('delete')

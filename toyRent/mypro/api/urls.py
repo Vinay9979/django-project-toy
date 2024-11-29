@@ -10,9 +10,5 @@ urlpatterns = [
     path("view/",views.view,name="view"),
     path("update/",views.update,name="update"),
     path("subcategory/",views.subcategories,name="subcategory"),
-
-
-
-
     path("",include(router.urls)),
 ]
